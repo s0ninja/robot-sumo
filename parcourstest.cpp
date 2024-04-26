@@ -1,14 +1,14 @@
 #define CAPTEUR_GAUCHE 8          // Capteur Gauche à la branche 1
 #define CAPTEUR_CENTRE 2          // Capteur Centre à la branche 2
-#define CAPTEUR_DROIT 3          // Capteur Droit à la branche 3
-#define LED_PIN 7                // Pin de la LED
+#define CAPTEUR_DROIT 3           // Capteur Droit à la branche 3
+#define LED_PIN 7                 // Pin de la LED
 
 void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
   pinMode(CAPTEUR_CENTRE, INPUT);
   pinMode(CAPTEUR_DROIT, INPUT);
-  pinMode(LED_PIN, OUTPUT);     // Définir le pin de la LED comme une sortie
-  Serial.begin(9600);           // Initialisation du moniteur série (vitesse)
+  pinMode(LED_PIN, OUTPUT);       // Définir le pin de la LED comme une sortie
+  Serial.begin(9600);             // Initialisation du moniteur série (vitesse)
 }
 
 void loop() {
@@ -19,7 +19,7 @@ void loop() {
   if (capteurGauche) {
     if (capteurCentre) {
       if (capteurDroit) {
-        Serial.print("Allez vers l'avant");
+        digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
       } else {
         Serial.print("Allez vers la gauche");
       }
@@ -36,7 +36,7 @@ void loop() {
     Serial.print("Allez vers l'avant");
     digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
   }
-
+  digitalWrite(LED_PIN, LOW);  // Eteindre la LED si les capteurs sont dans la bonne configuration
   delay(1000);  // Ajout d'une pause d'une seconde entre les lectures
 }
 
