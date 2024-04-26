@@ -1,4 +1,4 @@
-#define capteur_GAUCHE D1          //Capteur Gauche à la branche 1
+#define capteur_GAUCHE D8          //Capteur Gauche à la branche 1
 #define capteur_CENTRE D2          //Capteur Centre à la branche 2
 #define capteur_DROIT D3          //Capteur Droit à la branche 3
 
