@@ -19,22 +19,22 @@ void loop() {
   if (capteurGauche) {
     if (capteurCentre) {
       if (capteurDroit) {
-        Serial.println("Allez vers l'avant");
-        digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
+        Serial.print("Allez vers l'avant");
       } else {
-        Serial.println("Allez vers la gauche");
+        Serial.print("Allez vers la gauche");
       }
     } else {
-      Serial.println("Allez vers la gauche");
+      Serial.print("Allez vers la gauche");
     }
   } else if (capteurDroit) {
     if (capteurCentre) {
-      Serial.println("Allez vers la droite");
+      Serial.print("Allez vers la droite");
     } else {
-      Serial.println("Allez vers l'avant");
+      Serial.print("Allez vers l'avant");
     }
   } else {
-    Serial.println("Allez vers l'avant");
+    Serial.print("Allez vers l'avant");
+    digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
   }
 
   delay(1000);  // Ajout d'une pause d'une seconde entre les lectures
