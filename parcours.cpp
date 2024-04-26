@@ -1,6 +1,6 @@
-#define capteur_GAUCHE 1          //Capteur Gauche à la branche 1
-#define capteur_CENTRE 2          //Capteur Centre à la branche 2
-#define capteur_DROIT 3          //Capteur Droit à la branche 3
+#define capteur_GAUCHE D1          //Capteur Gauche à la branche 1
+#define capteur_CENTRE D2          //Capteur Centre à la branche 2
+#define capteur_DROIT D3          //Capteur Droit à la branche 3
 
 #define Roue_GAUCHE 4          //Roue Gauche à la branche 4
 #define Roue_DROIT 5          //Roue Droit à la branche 5
