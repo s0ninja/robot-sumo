@@ -1,49 +1,43 @@
-#define capteur_GAUCHE D8          //Capteur Gauche à la branche 1
-#define capteur_CENTRE D2          //Capteur Centre à la branche 2
-#define capteur_DROIT D3          //Capteur Droit à la branche 3
-
-const int vitesseMinimal = 50;
-const int vitesseMoyenne = 180;
-const int vitesseModérée = 210;
-const int vitesseMaximale = 255;
+#define CAPTEUR_GAUCHE 8          // Capteur Gauche à la branche 1
+#define CAPTEUR_CENTRE 2          // Capteur Centre à la branche 2
+#define CAPTEUR_DROIT 3          // Capteur Droit à la branche 3
+#define LED_PIN 7                // Pin de la LED
 
 void setup() {
-  pinMode(CAPTEUR_GAUCHE, OUTPUT);
-  pinMode(CAPTEUR_CENTRE, OUTPUT);
-  pinMode(CAPTEUR_DROITE,OUTPUT);
-  Serial.begin(9600);               // Initialisation du moniteur série (vitesse)
+  pinMode(CAPTEUR_GAUCHE, INPUT);
+  pinMode(CAPTEUR_CENTRE, INPUT);
+  pinMode(CAPTEUR_DROIT, INPUT);
+  pinMode(LED_PIN, OUTPUT);     // Définir le pin de la LED comme une sortie
+  Serial.begin(9600);           // Initialisation du moniteur série (vitesse)
 }
 
 void loop() {
-  bool capteurGauche = digitalRead(capteur_GAUCHE) == HIGH;
-  bool capteurCentre = digitalRead(capteur_CENTRE) == HIGH;
-  bool capteurDroit = digitalRead(capteur_DROIT) == HIGH;
+  bool capteurGauche = digitalRead(CAPTEUR_GAUCHE) == HIGH;
+  bool capteurCentre = digitalRead(CAPTEUR_CENTRE) == HIGH;
+  bool capteurDroit = digitalRead(CAPTEUR_DROIT) == HIGH;
 
   if (capteurGauche) {
     if (capteurCentre) {
       if (capteurDroit) {
-       Serial.print("Allez vers l'avant")
+        Serial.println("Allez vers l'avant");
+        digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
       } else {
-        Serial.print("Allez vers la gauche")
+        Serial.println("Allez vers la gauche");
       }
     } else {
-      Serial.print("Allez vers la gauche")
-      }
+      Serial.println("Allez vers la gauche");
     }
-  } else if (capteurGauche) {
+  } else if (capteurDroit) {
     if (capteurCentre) {
-      if (capteurDroit) {
-        Serial.print("Allez vers l'avant")
-      } else {
-        Serial.print("Allez vers la droite")
-      }
-      Serial.print("Allez vers la droite")
+      Serial.println("Allez vers la droite");
     } else {
-      return;
+      Serial.println("Allez vers l'avant");
     }
   } else {
-    return;
+    Serial.println("Allez vers l'avant");
   }
+
+  delay(1000);  // Ajout d'une pause d'une seconde entre les lectures
 }
 
 
