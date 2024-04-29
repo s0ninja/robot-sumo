@@ -1,13 +1,16 @@
-#define CAPTEUR_GAUCHE 8          // Capteur Gauche à la branche 1
-#define CAPTEUR_CENTRE 2          // Capteur Centre à la branche 2
-#define CAPTEUR_DROIT 3           // Capteur Droit à la branche 3
+#define CAPTEUR_GAUCHE 8          // Capteur Gauche à la broche 8
+#define CAPTEUR_CENTRE 2          // Capteur Centre à la broche 2
+#define CAPTEUR_DROIT 3           // Capteur Droit à la broche 3
 
-#define Roue_DROIT A
-#define Roue_GAUCHE B
+#define Roue_DROIT A1
+#define Roue_GAUCHE B1
 
-#define LED_PIN 7                 // Pin de la LED
+#define LED_PIN 7                 // Broche de la LED
 
 #define start_button 4
+
+int vitesseMinimale = 100; // Vitesse minimale des moteurs
+int vitesseModeree = 200; // Vitesse modérée des moteurs
 
 void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
@@ -15,70 +18,53 @@ void setup() {
   pinMode(CAPTEUR_DROIT, INPUT);
   pinMode(Roue_GAUCHE, OUTPUT);
   pinMode(Roue_DROIT, OUTPUT);
-  pinMode(start_button, INPUT);         // Boutton pour start le robot
+  pinMode(start_button, INPUT);         // Bouton pour démarrer le robot
   pinMode(LED_PIN, OUTPUT);       // Définir le pin de la LED comme une sortie
   Serial.begin(9600);             // Initialisation du moniteur série (vitesse)
 }
 
 void loop() {
-  bool capteurGauche = digitalRead(CAPTEUR_GAUCHE) == true;
-  bool capteurCentre = digitalRead(CAPTEUR_CENTRE) == true;
-  bool capteurDroit = digitalRead(CAPTEUR_DROIT) == true;
-  bool start = digitalRead(start_button) == true;
+  bool capteurGauche = digitalRead(CAPTEUR_GAUCHE);
+  bool capteurCentre = digitalRead(CAPTEUR_CENTRE);
+  bool capteurDroit = digitalRead(CAPTEUR_DROIT);
+  bool start = digitalRead(start_button);
 
-  if (start_button == true) {
-    digitalWrite(start_button);
-    
-    if (capteurGauche) {
-      if (capteurCentre) {
-        if (capteurDroit) {
-          digitalWrite(LED_PIN, true);  // Allumer la LED si les capteurs sont dans la bonne configuration
-        } else {
-          digitalWrite(Roue_GAUCHE, true);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-          analogWrite(Roue_GAUCHE, vitesseMinimal);       // vitesse du moteur à la valeur |Ligne 10
-
-          digitalWrite(Roue_DROIT, true);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-          analogWrite(Roue_DROIT, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
-        }
-      } else {
-         digitalWrite(Roue_GAUCHE, true);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_GAUCHE, vitesseMinimal);       // vitesse du moteur à la valeur |Ligne 10
-
-        digitalWrite(Roue_DROIT, true);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_DROIT, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
-      }
-    } else if (capteurDroit) {
-      if (capteurCentre) {
-        digitalWrite(Roue_GAUCHE, true);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_GAUCHE, vitesseMinimal);        // vitesse du moteur à la valeur |Ligne 8
-
-        digitalWrite(Roue_DROIT, true);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
-      } else {
-        digitalWrite(Roue_GAUCHE, true);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_GAUCHE, vitesseMinimal);        // vitesse du moteur à la valeur |Ligne 8
-
-        digitalWrite(Roue_DROIT, true);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
-      }
+  while (start) {
+    if (capteurGauche && capteurCentre && capteurDroit) {
+      digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
     } else {
-      digitalWrite(Roue_GAUCHE, true);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
-      analogWrite(Roue_GAUCHE, vitesseModérée);        // vitesse du moteur à la valeur |Ligne 8
+      if (capteurGauche) {
 
-      digitalWrite(Roue_DROIT, true);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
-      analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
+        digitalWrite(Roue_GAUCHE, HIGH);
+        analogWrite(Roue_GAUCHE, vitesseMinimale);
+        digitalWrite(Roue_DROIT, HIGH);
+        analogWrite(Roue_DROIT, vitesseModeree);
 
-      digitalWrite(LED_PIN, true);  // Allumer la LED si les capteurs sont dans la bonne configuration
+      } else if (capteurDroit) {
+
+        digitalWrite(Roue_GAUCHE, HIGH);
+        analogWrite(Roue_GAUCHE, vitesseModeree);
+        digitalWrite(Roue_DROIT, HIGH);
+        analogWrite(Roue_DROIT, vitesseMinimale);
+
+      } else {
+
+        digitalWrite(Roue_GAUCHE, HIGH);
+        analogWrite(Roue_GAUCHE, vitesseModeree);
+        digitalWrite(Roue_DROIT, HIGH);
+        analogWrite(Roue_DROIT, vitesseModeree);
+
+      }
     }
 
-    digitalWrite(LED_PIN, LOW);  // Eteindre la LED si les capteurs sont dans la bonne configuration
-    delay(1000);  // Ajout d'une pause d'une seconde entre les lectures
-  } else {
-    return;
+    delay(100);  // Ajout d'une pause plus courte pour ne pas bloquer la boucle
+    start = digitalRead(start_button);  // Mise à jour de l'état du bouton
+    
   }
+  // Arrêter les moteurs lorsque le bouton est relâché
+  digitalWrite(Roue_GAUCHE, LOW);
+  digitalWrite(Roue_DROIT, LOW);
 }
-
-
 
 
 /*
