@@ -1,79 +1,61 @@
-#define capteur_GAUCHE D8          //Capteur Gauche à la branche 1
-#define capteur_CENTRE D2          //Capteur Centre à la branche 2
-#define capteur_DROIT D3          //Capteur Droit à la branche 3
+#define CAPTEUR_GAUCHE 8          // Capteur Gauche à la branche 1
+#define CAPTEUR_CENTRE 2          // Capteur Centre à la branche 2
+#define CAPTEUR_DROIT 3           // Capteur Droit à la branche 3
 
-#define Roue_GAUCHE D4          //Roue Gauche à la branche 4
-#define Roue_DROIT D5          //Roue Droit à la branche 5
-
-const int vitesseMinimal = 50;
-const int vitesseMoyenne = 180;
-const int vitesseModérée = 210;
-const int vitesseMaximale = 255;
+#define LED_PIN 7                 // Pin de la LED
 
 void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
   pinMode(CAPTEUR_CENTRE, INPUT);
-  pinMode(CAPTEUR_DROITE, INPUT);
-  Serial.begin(9600);               // Initialisation du moniteur série (vitesse)
-  pinMode(Roue_GAUCHE, OUTPUT);     // La broche de contrôle du moteur est en sortie du côté Gauche
-  pinMode(Roue_DROIT, OUTPUT);     // La broche de contrôle du moteur est en sortie du côté Droit
+  pinMode(CAPTEUR_DROIT, INPUT);
+  pinMode(LED_PIN, OUTPUT);       // Définir le pin de la LED comme une sortie
+  Serial.begin(9600);             // Initialisation du moniteur série (vitesse)
 }
 
 void loop() {
-  bool capteurGauche = digitalRead(capteur_GAUCHE) == HIGH;
-  bool capteurCentre = digitalRead(capteur_CENTRE) == HIGH;
-  bool capteurDroit = digitalRead(capteur_DROIT) == HIGH;
+  bool capteurGauche = digitalRead(CAPTEUR_GAUCHE) == HIGH;
+  bool capteurCentre = digitalRead(CAPTEUR_CENTRE) == HIGH;
+  bool capteurDroit = digitalRead(CAPTEUR_DROIT) == HIGH;
 
   if (capteurGauche) {
     if (capteurCentre) {
       if (capteurDroit) {
-       digitalWrite(Roue_GAUCHE, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-       analogWrite(Roue_GAUCHE, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
-
-       digitalWrite(Roue_DROIT, HIGH);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
-       analogWrite(Roue_DROIT, vitesseModérée);        // vitesse du moteur à la valeur |Ligne 10
-
+        digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
       } else {
         digitalWrite(Roue_GAUCHE, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_GAUCHE, vitesseMinimal);       // vitesse du moteur à la valeur |Ligne 8
-        
-        digitalWrite(Roue_DROIT, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_DROIT, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
+        analogWrite(Roue_GAUCHE, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
       }
+    } else {
+      digitalWrite(Roue_GAUCHE, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
+      analogWrite(Roue_GAUCHE, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
+    }
+  } else if (capteurDroit) {
+    if (capteurCentre) {
+      digitalWrite(Roue_GAUCHE, HIGH);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
+      analogWrite(Roue_GAUCHE, vitesseMinimal);        // vitesse du moteur à la valeur |Ligne 8
+
+      digitalWrite(Roue_DROIT, HIGH);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
+      analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
     } else {
       digitalWrite(Roue_GAUCHE, HIGH);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
       analogWrite(Roue_GAUCHE, vitesseMinimal);        // vitesse du moteur à la valeur |Ligne 8
 
       digitalWrite(Roue_DROIT, HIGH);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
       analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
-      }
-    }
-  } else if (capteurGauche) {
-    if (capteurCentre) {
-      if (capteurDroit) {
-        digitalWrite(Roue_GAUCHE, LOW);                // Mettez la broche de contrôle du moteur gauche à LOW pour faire reculer
-        analogWrite(Roue_GAUCHE, vitesseModérée);      // vitesse du moteur à la valeur |Ligne 10
-
-        digitalWrite(Roue_DROIT, LOW);                 // Mettez la broche de contrôle du moteur droit à LOW pour faire reculer
-        analogWrite(Roue_DROIT, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
-      } else {
-        digitalWrite(Roue_GAUCHE, HIGH);               // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_GAUCHE, vitesseModérée);      // vitesse du moteur à la valeur |Ligne 8
-
-        digitalWrite(Roue_DROIT, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_DROIT, vitesseMinimal);       // vitesse du moteur à la valeur |Ligne 10
-      }
-      digitalWrite(Roue_GAUCHE, HIGH);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
-      analogWrite(Roue_GAUCHE, vitesseModérée);        // vitesse du moteur à la valeur |Ligne 8
-
-      digitalWrite(Roue_DROIT, HIGH);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
-      analogWrite(Roue_DROIT, vitesseMinimal);         // vitesse du moteur à la valeur |Ligne 10
-    } else {
-      return;
     }
   } else {
-    return;
+    digitalWrite(Roue_GAUCHE, HIGH);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
+    analogWrite(Roue_GAUCHE, vitesseMinimal);        // vitesse du moteur à la valeur |Ligne 8
+
+    digitalWrite(Roue_DROIT, HIGH);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
+    analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
+
+    digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
   }
+
+  digitalWrite(LED_PIN, LOW);  // Eteindre la LED si les capteurs sont dans la bonne configuration
+  delay(1000);  // Ajout d'une pause d'une seconde entre les lectures
+
 }
 
 
