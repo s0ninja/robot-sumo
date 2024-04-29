@@ -35,11 +35,17 @@ void loop() {
           digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
         } else {
           digitalWrite(Roue_GAUCHE, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-          analogWrite(Roue_GAUCHE, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
+          analogWrite(Roue_GAUCHE, vitesseMinimal);       // vitesse du moteur à la valeur |Ligne 10
+
+          digitalWrite(Roue_DROIT, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
+          analogWrite(Roue_DROIT, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
         }
       } else {
-        digitalWrite(Roue_GAUCHE, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
-        analogWrite(Roue_GAUCHE, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
+         digitalWrite(Roue_GAUCHE, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
+        analogWrite(Roue_GAUCHE, vitesseMinimal);       // vitesse du moteur à la valeur |Ligne 10
+
+        digitalWrite(Roue_DROIT, HIGH);                // Mettre la broche de contrôle du moteur à HIGH pour avancer
+        analogWrite(Roue_DROIT, vitesseModérée);       // vitesse du moteur à la valeur |Ligne 10
       }
     } else if (capteurDroit) {
       if (capteurCentre) {
