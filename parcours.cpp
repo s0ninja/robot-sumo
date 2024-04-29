@@ -2,8 +2,8 @@
 #define CAPTEUR_CENTRE 2          // Capteur Centre à la branche 2
 #define CAPTEUR_DROIT 3           // Capteur Droit à la branche 3
 
-#define Roue_DROIT 6
-#define Roue_GAUCHE 5
+#define Roue_DROIT A
+#define Roue_GAUCHE B
 
 #define LED_PIN 7                 // Pin de la LED
 
