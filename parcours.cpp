@@ -63,7 +63,7 @@ void loop() {
       }
     } else {
       digitalWrite(Roue_GAUCHE, HIGH);                 // Mettre la broche de contrôle du moteur à HIGH pour avancer
-      analogWrite(Roue_GAUCHE, vitesseMinimal);        // vitesse du moteur à la valeur |Ligne 8
+      analogWrite(Roue_GAUCHE, vitesseModérée);        // vitesse du moteur à la valeur |Ligne 8
 
       digitalWrite(Roue_DROIT, HIGH);                  // Mettre la broche de contrôle du moteur à HIGH pour avancer
       analogWrite(Roue_DROIT, vitesseModérée);         // vitesse du moteur à la valeur |Ligne 10
