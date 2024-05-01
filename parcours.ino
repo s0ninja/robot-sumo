@@ -1,70 +1,54 @@
-#define CAPTEUR_GAUCHE 8          // Capteur Gauche à la broche 8
-#define CAPTEUR_CENTRE 2          // Capteur Centre à la broche 2
-#define CAPTEUR_DROIT 3           // Capteur Droit à la broche 3
+#define CAPTEUR_GAUCHE A0  // Capteur Gauche à la broche A0
+#define CAPTEUR_CENTRE A1  // Capteur Centre à la broche A1
+#define CAPTEUR_DROIT A2   // Capteur Droit à la broche A2
 
-#define Roue_DROIT A1
-#define Roue_GAUCHE B1
+#define Roue_DROITE 12     // Broche du moteur droit
+#define Roue_GAUCHE 13     // Broche du moteur gauche
 
-#define LED_PIN 7                 // Broche de la LED
+#define start_button 4     // Bouton pour démarrer le robot
 
-#define start_button 4
-
-int vitesseMinimale = 100; // Vitesse minimale des moteurs
-int vitesseModeree = 200; // Vitesse modérée des moteurs
+bool capteurGauche;
+bool capteurCentre;
+bool capteurDroit;
+bool start;
 
 void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
   pinMode(CAPTEUR_CENTRE, INPUT);
   pinMode(CAPTEUR_DROIT, INPUT);
   pinMode(Roue_GAUCHE, OUTPUT);
-  pinMode(Roue_DROIT, OUTPUT);
-  pinMode(start_button, INPUT);         // Bouton pour démarrer le robot
-  pinMode(LED_PIN, OUTPUT);       // Définir le pin de la LED comme une sortie
-  Serial.begin(9600);             // Initialisation du moniteur série (vitesse)
+  pinMode(Roue_DROITE, OUTPUT);
+  pinMode(start_button, INPUT_PULLUP); // Bouton pour démarrer le robot
 }
 
 void loop() {
-  bool capteurGauche = digitalRead(CAPTEUR_GAUCHE);
-  bool capteurCentre = digitalRead(CAPTEUR_CENTRE);
-  bool capteurDroit = digitalRead(CAPTEUR_DROIT);
-  bool start = digitalRead(start_button);
+  capteurGauche = digitalRead(CAPTEUR_GAUCHE);
+  capteurCentre = digitalRead(CAPTEUR_CENTRE);
+  capteurDroit = digitalRead(CAPTEUR_DROIT);
+  start = digitalRead(start_button);
 
-  while (start) {
+  if (start) {
     if (capteurGauche && capteurCentre && capteurDroit) {
-      digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
+      digitalWrite(Roue_GAUCHE, HIGH);
+      digitalWrite(Roue_DROITE, HIGH);
     } else {
       if (capteurGauche) {
-
-        digitalWrite(Roue_GAUCHE, HIGH);
-        analogWrite(Roue_GAUCHE, vitesseMinimale);
-        digitalWrite(Roue_DROIT, HIGH);
-        analogWrite(Roue_DROIT, vitesseModeree);
-
+        digitalWrite(Roue_GAUCHE, LOW);
+        digitalWrite(Roue_DROITE, HIGH);
       } else if (capteurDroit) {
-
         digitalWrite(Roue_GAUCHE, HIGH);
-        analogWrite(Roue_GAUCHE, vitesseModeree);
-        digitalWrite(Roue_DROIT, HIGH);
-        analogWrite(Roue_DROIT, vitesseMinimale);
-
+        digitalWrite(Roue_DROITE, LOW);
       } else {
-
-        digitalWrite(Roue_GAUCHE, HIGH);
-        analogWrite(Roue_GAUCHE, vitesseModeree);
-        digitalWrite(Roue_DROIT, HIGH);
-        analogWrite(Roue_DROIT, vitesseModeree);
-
+         digitalWrite(Roue_GAUCHE, LOW); // Reculer lorsque les capteurs ne détectent ni noir ni blanc
+         digitalWrite(Roue_DROITE, LOW);
       }
     }
-
-    delay(100);  // Ajout d'une pause plus courte pour ne pas bloquer la boucle
-    start = digitalRead(start_button);  // Mise à jour de l'état du bouton
-    
+  } else {
+    digitalWrite(Roue_GAUCHE, LOW);
+    digitalWrite(Roue_DROITE, LOW);
   }
-  // Arrêter les moteurs lorsque le bouton est relâché
-  digitalWrite(Roue_GAUCHE, LOW);
-  digitalWrite(Roue_DROIT, LOW);
 }
+
 
 
 /*
