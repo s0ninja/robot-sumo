@@ -1,9 +1,13 @@
-const int CAPTEUR_GAUCHE = A0; // Capteur Gauche à la broche A0
-const int CAPTEUR_CENTRE = A1;  // Capteur Centre à la broche A1
-const int CAPTEUR_DROIT = A2;   // Capteur Droit à la broche A2
+const int CAPTEUR_GAUCHE = 5; // Capteur Gauche à la broche A0
+const int CAPTEUR_CENTRE = 6;  // Capteur Centre à la broche A1
+const int CAPTEUR_DROIT = 8;   // Capteur Droit à la broche A2
 
-const int Roue_DROITE = 12;     // Broche du moteur droit
-const int Roue_GAUCHE = 13;     // Broche du moteur gauche
+const int vitesseDroite = 11; 
+const int vitesseGauche = 3;
+const int sensDroite = 13;
+const int sensGauche =  12;
+const int freinDroite = 8;
+const int freinGauche = 9;
 
 const int start_button = 4;     // Bouton pour démarrer le robot
 
@@ -19,8 +23,14 @@ void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
   pinMode(CAPTEUR_CENTRE, INPUT);
   pinMode(CAPTEUR_DROIT, INPUT);
-  pinMode(Roue_GAUCHE, OUTPUT);
-  pinMode(Roue_DROITE, OUTPUT);
+  
+  pinMode(vitesseDroite, OUTPUT);
+  pinMode(vitesseGauche, OUTPUT);
+  pinMode(sensDroite, OUTPUT);
+  pinMode(sensGauche, OUTPUT);
+  pinMode(freinDroite, OUTPUT);
+  pinMode(freinGauche, OUTPUT);
+
   pinMode(led, OUTPUT);
   pinMode(start_button, INPUT); // Bouton pour démarrer le robot
 }
@@ -42,8 +52,7 @@ void loop() {
     }
   }
 
-  if (start == true) {
-    digitalWrite(led, HIGH);
+      digitalWrite(led, HIGH);
     if (capteurGauche, HIGH & capteurCentre, HIGH & capteurDroit, HIGH) {
       digitalWrite(Roue_GAUCHE, HIGH);
       digitalWrite(Roue_DROITE, HIGH);
