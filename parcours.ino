@@ -1,15 +1,15 @@
 const int CAPTEUR_GAUCHE = 5; // Capteur Gauche à la broche A0
-const int CAPTEUR_CENTRE = 6;  // Capteur Centre à la broche A1
-const int CAPTEUR_DROIT = 8;   // Capteur Droit à la broche A2
+const int CAPTEUR_CENTRE = 6; // Capteur Centre à la broche A1
+const int CAPTEUR_DROIT = 2; // Capteur Droit à la broche A2
 
-const int vitesseDroite = 11; 
+const int vitesseDroite = 11;
 const int vitesseGauche = 3;
 const int sensDroite = 13;
-const int sensGauche =  12;
+const int sensGauche = 12;
 const int freinDroite = 8;
 const int freinGauche = 9;
 
-const int start_button = 4;     // Bouton pour démarrer le robot
+const int start_button = 4; // Bouton pour démarrer le robot
 
 const int led = 7;
 
@@ -23,7 +23,7 @@ void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
   pinMode(CAPTEUR_CENTRE, INPUT);
   pinMode(CAPTEUR_DROIT, INPUT);
-  
+
   pinMode(vitesseDroite, OUTPUT);
   pinMode(vitesseGauche, OUTPUT);
   pinMode(sensDroite, OUTPUT);
@@ -40,6 +40,7 @@ void loop() {
   capteurCentre = digitalRead(CAPTEUR_CENTRE);
   capteurDroit = digitalRead(CAPTEUR_DROIT);
   etatBouton = digitalRead(start_button);
+  
 
   if (etatBouton == true) {
     if (start == true) {
@@ -52,29 +53,67 @@ void loop() {
     }
   }
 
-      digitalWrite(led, HIGH);
-    if (capteurGauche, HIGH & capteurCentre, HIGH & capteurDroit, HIGH) {
-      digitalWrite(Roue_GAUCHE, HIGH);
-      digitalWrite(Roue_DROITE, HIGH);
-    } else {
-      if (capteurGauche, HIGH) {
-        digitalWrite(Roue_GAUCHE, LOW);
-        digitalWrite(Roue_DROITE, HIGH);
-      } else if (capteurDroit, HIGH) {
-        digitalWrite(Roue_GAUCHE, HIGH);
-        digitalWrite(Roue_DROITE, LOW);
-      } else {
-         digitalWrite(Roue_GAUCHE, LOW); // Reculer lorsque les capteurs ne détectent ni noir ni blanc
-         digitalWrite(Roue_DROITE, LOW);
-      }
-    }
+  if (start = HIGH) {
+    digitalWrite(7, HIGH);
+    digitalWrite(4, HIGH);
   } else {
-    digitalWrite(led, LOW);
-    digitalWrite(Roue_GAUCHE, LOW);
-    digitalWrite(Roue_DROITE, LOW);
+    digitalWrite(4, LOW);
   }
-}
 
+  if (capteurGauche && capteurCentre && capteurDroit) {
+    digitalWrite(7, HIGH);
+    digitalWrite(4, HIGH);
+
+    digitalWrite(13, HIGH); // Sens Droit Avancer
+    digitalWrite(12, HIGH); //Sens Gauche Avancer
+
+    analogWrite(11, 255); //Vitesse 255 Droit
+    analogWrite(3, 255); //Vitesse 255 Gauche
+
+    digitalWrite(8, LOW); //Frein non engagé Droit
+    digitalWrite(9, LOW); //Frein non engagé Gauche
+  } else {
+    if (capteurGauche) {
+      digitalWrite(13, HIGH); // Sens Droit Avancer
+      digitalWrite(12, HIGH); //Sens Gauche Avancer
+
+      analogWrite(11, 255); //Vitesse 255 Droit
+      analogWrite(3, 0); //Vitesse 0 Gauche
+
+      digitalWrite(8, HIGH); //Frein engagé Droit
+      digitalWrite(9, LOW); //Frein non engagé Gauche
+    } else if (capteurDroit) {
+      digitalWrite(13, HIGH); // Sens Droit Avancer
+      digitalWrite(12, HIGH); //Sens Gauche Avancer
+
+      analogWrite(11, 0); //Vitesse 0 Droit
+      analogWrite(3, 255); //Vitesse 255 Gauche
+
+      digitalWrite(8, LOW); //Frein non engagé Droit
+      digitalWrite(9, HIGH); //Frein engagé Gauche
+    } else {
+      digitalWrite(13, LOW); // Sens Droit Avancer
+      digitalWrite(12, LOW); //Sens Gauche Avancer
+
+      analogWrite(11, 0); //Vitesse 0 Droit
+      analogWrite(3, 0); //Vitesse 0 Gauche
+
+      digitalWrite(8, HIGH); //Frein engagé Droit
+      digitalWrite(9, HIGH); //Frein engagé Gauche
+    }
+  }
+  digitalWrite(4, LOW);
+  digitalWrite(7, LOW);
+
+  digitalWrite(13, LOW); // Sens Droit Avancer
+  digitalWrite(12, LOW); //Sens Gauche Avancer
+
+  analogWrite(11, 0); //Vitesse 0 Droit
+  analogWrite(3, 0); //Vitesse 0 Gauche
+
+  digitalWrite(8, HIGH); //Frein engagé Droit
+  digitalWrite(9, HIGH); //Frein engagé Gauche
+}
 
 
 /*
