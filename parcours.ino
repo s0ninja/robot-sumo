@@ -41,19 +41,19 @@ void loop() {
   capteurDroit = digitalRead(CAPTEUR_DROIT);
   etatBouton = digitalRead(start_button);
   
-
+ss
   if (etatBouton == true) {
-    if (start == true) {
-      start = false;
+    if (start == false) {
+      start = true;
       delay(500);
     }
     else {
-      start = true;
+      start = false;
       delay(500);
     }
   }
 
-  if (start = HIGH) {
+  if (start = true) {
     digitalWrite(7, HIGH);
     digitalWrite(4, HIGH);
   } else {
@@ -114,7 +114,6 @@ void loop() {
   digitalWrite(8, HIGH); //Frein engagé Droit
   digitalWrite(9, HIGH); //Frein engagé Gauche
 }
-
 
 /*
  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____
