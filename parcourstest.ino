@@ -1,45 +1,119 @@
-#define CAPTEUR_GAUCHE 8          // Capteur Gauche à la branche 1
-#define CAPTEUR_CENTRE 2          // Capteur Centre à la branche 2
-#define CAPTEUR_DROIT 3           // Capteur Droit à la branche 3
-#define LED_PIN 7                 // Pin de la LED
+const int CAPTEUR_GAUCHE = 5; // Capteur Gauche à la broche A0
+const int CAPTEUR_CENTRE = 6; // Capteur Centre à la broche A1
+const int CAPTEUR_DROIT = 2; // Capteur Droit à la broche A2
+
+const int vitesseDroite = 11;
+const int vitesseGauche = 3;
+const int sensDroite = 13;
+const int sensGauche = 12;
+const int freinDroite = 8;
+const int freinGauche = 9;
+
+const int start_button = 4; // Bouton pour démarrer le robot
+
+const int led = 7;
+
+bool capteurGauche;
+bool capteurCentre;
+bool capteurDroit;
+bool start = false;
+bool etatBouton = false;
 
 void setup() {
   pinMode(CAPTEUR_GAUCHE, INPUT);
   pinMode(CAPTEUR_CENTRE, INPUT);
   pinMode(CAPTEUR_DROIT, INPUT);
-  pinMode(LED_PIN, OUTPUT);       // Définir le pin de la LED comme une sortie
-  Serial.begin(9600);             // Initialisation du moniteur série (vitesse)
+
+  pinMode(vitesseDroite, OUTPUT);
+  pinMode(vitesseGauche, OUTPUT);
+  pinMode(sensDroite, OUTPUT);
+  pinMode(sensGauche, OUTPUT);
+  pinMode(freinDroite, OUTPUT);
+  pinMode(freinGauche, OUTPUT);
+
+  pinMode(led, OUTPUT);
+  pinMode(start_button, INPUT); // Bouton pour démarrer le robot
 }
 
 void loop() {
-  bool capteurGauche = digitalRead(CAPTEUR_GAUCHE) == HIGH;
-  bool capteurCentre = digitalRead(CAPTEUR_CENTRE) == HIGH;
-  bool capteurDroit = digitalRead(CAPTEUR_DROIT) == HIGH;
+  capteurGauche = digitalRead(CAPTEUR_GAUCHE);
+  capteurCentre = digitalRead(CAPTEUR_CENTRE);
+  capteurDroit = digitalRead(CAPTEUR_DROIT);
+  etatBouton = digitalRead(start_button);
 
-  if (capteurGauche) {
-    if (capteurCentre) {
-      if (capteurDroit) {
-        digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
-      } else {
-        Serial.print("Allez vers la gauche");
-      }
-    } else {
-      Serial.print("Allez vers la gauche");
+  if (etatBouton == true) {
+    if (start == false) {
+      start = true;
+      delay(500);
     }
-  } else if (capteurDroit) {
-    if (capteurCentre) {
-      Serial.print("Allez vers la droite");
-    } else {
-      Serial.print("Allez vers l'avant");
+    else {
+      start = false;
+      delay(500);
     }
-  } else {
-    Serial.print("Allez vers l'avant");
-    digitalWrite(LED_PIN, HIGH);  // Allumer la LED si les capteurs sont dans la bonne configuration
   }
-  digitalWrite(LED_PIN, LOW);  // Eteindre la LED si les capteurs sont dans la bonne configuration
-  delay(1000);  // Ajout d'une pause d'une seconde entre les lectures
-}
 
+  if (start == true) {
+    digitalWrite(led, HIGH);
+    digitalWrite(start_button, HIGH);
+  } else {
+    digitalWrite(start_button, LOW);
+  }
+
+  if (capteurGauche && capteurCentre && capteurDroit) {
+    Serial.println("Bouton poussoir start"); //bouton 7  allumé
+    Serial.println("led allumer"); //led allumé
+
+    Serial.println("sens droit avancer"); // Sens Droit Avancer
+    Serial.println("sens gauche avancer"); //Sens Gauche Avancer
+
+    Serial.println("vitesse 255 droit"); //Vitesse 255 Droit
+    Serial.println("vitesse 255 gauche"); //Vitesse 255 Gauche
+
+    Serial.println("frein non engagé"); //Frein non engagé Droit
+    Serial.println("frein non engagé gauche"); //Frein non engagé Gauche
+  } else {
+    if (capteurGauche) {
+      Serial.println("sens droit avancer"); // Sens Droit Avancer
+      Serial.println("sens gauche avancer"); //Sens Gauche Avancer
+
+      Serial.println("frein 255 droit"); //Vitesse 255 Droit
+      Serial.println("vitesse 0 gauche"); //Vitesse 0 Gauche
+
+      Serial.println("frein engagé droit"); //Frein engagé Droit
+      Serial.println("frein non engagé gauche"); //Frein non engagé Gauche
+    } else if (capteurDroit) {
+      Serial.println("sens droit avancer"); // Sens Droit Avancer
+      Serial.println("sens gauche avancer"); //Sens Gauche Avancer
+
+      Serial.println("vitesse 0 droit"); //Vitesse 0 Droit
+      Serial.println("vitesse 255 gauche"); //Vitesse 255 Gauche
+
+      Serial.println("frein non engagé"); //Frein non engagé Droit
+      Serial.println("frein engagé gauche"); //Frein engagé Gauche
+    } else {
+      Serial.println("sens droit avancer"); // Sens Droit Avancer
+      Serial.println("sens gauche avancer"); //Sens Gauche Avancer
+
+      Serial.println("vitesse 0 droit"); //Vitesse 0 Droit
+      Serial.println("vitesse 0 gauche"); //Vitesse 0 Gauche
+
+      Serial.println("frein engagé droit"); //Frein engagé Droit
+      Serial.println("frein engagé gauche"); //Frein engagé Gauche
+    }
+  }
+
+  Serial.println("Bouton poussoir start"); //bouton 7
+  Serial.println("led eteint"); //led eteint
+
+  Serial.println("sens avancer droit"); // Sens Droit Avancer
+  Serial.println("sens avancer gauche"); //Sens Gauche Avancer
+
+  Serial.println("vitessee 0 droit"); //Vitesse 0 Droit
+  Serial.println("vitesse 0 gache"); //Vitesse 0 Gauche
+
+  Serial.println("frein engagé droit"); //Frein engagé Droit
+  Serial.println("frein désangagé gauche"); //Frein engagé Gauche
+}
 
 
 
