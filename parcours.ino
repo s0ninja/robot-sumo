@@ -1,6 +1,6 @@
 const int linefinderGauche = 2;
 const int linefinderDroite = 4;
-const int linefinderCentre = A3;
+const int linefinderCentre = 6;
 const int boutonMarche = A2;
 
 const int sensMGauche = 12;
@@ -53,11 +53,23 @@ byte acquisition() {
   LFC = digitalRead(linefinderCentre);
 
   if (LFD == LOW && LFG == LOW && LFC == LOW) {
+    if (LFD == LOW) {
     return 0;
+    } else {
+      return 1;
+    }
   } else if (LFD == LOW && LFC == LOW) {
-    return 1;
+    if {
+      return 1;
+    } else {
+      break;
+    }
   } else if (LFG == LOW && LFC == LOW) {
+    if (LFG == LOW) {
     return 2;
+    } else {
+      break;
+    }
   } else {
     return 3;
   }
@@ -80,10 +92,10 @@ void setup() {
 
 void loop() {
   switch (acquisition()) {
-    case 0:
+    case 0: // Arrêt
       arret();
       break;
-    case 1:
+    case 1: // Avancer
       moteurDroite(AFOND);
       moteurGaucheR(AFOND);
       break;
@@ -91,7 +103,6 @@ void loop() {
       moteurDroiteR(AFOND);
       moteurGauche(AFOND);
       break;
-
     case 3 :
       moteurDroite(AFOND);
       moteurGaucheR(AFOND);
@@ -99,7 +110,6 @@ void loop() {
       moteurDroiteR(AFOND);
       moteurGauche(AFOND);
       break;
-
     default:
       arret();
       break;
