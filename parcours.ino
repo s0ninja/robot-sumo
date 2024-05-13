@@ -1,121 +1,126 @@
-const int linefinderGauche = 2;
-const int linefinderDroite = 4;
-const int linefinderCentre = 6;
-const int boutonMarche = A2;
+#define linefinderGauche 2
+#define linefinderDroite 4
+#define linefinderCentre 3
+#define boutonMarche A2
+#define sensMGauche 12
+#define marcheGauche 9
+#define puissanceGauche 3
+#define sensMDroit 13
+#define marcheDroit 8
+#define puissanceDroit 11
+#define AFOND 130
+#define PRUDENT 60
 
-const int sensMGauche = 12;
-const int marcheGauche = 9;
-const int puissanceGauche = 3;
-
-const int sensMDroit = 13;
-const int marcheDroit = 8;
-const int puissanceDroit = 11;
-
-const int AFOND = 130;
-const int PRUDENT = 60;
-const int NBMESURE = 4;
-
-bool LFG = false, LFD = false, LFC = false;
+bool LFG = 0, LFD = 0, LFC = 0;
+int X = 0;
 
 void arret() {
-  // S'arrête
-  digitalWrite(marcheGauche, LOW);
-  digitalWrite(marcheDroit, LOW);
+  digitalWrite(puissanceDroit, LOW);
+  digitalWrite(puissanceGauche, LOW);
+  digitalWrite(marcheGauche, HIGH);
+  digitalWrite(marcheDroit, HIGH);
 }
 
-void moteurDroite(int vitesse) {
-  //Tourne à droite
-  digitalWrite(sensMDroit, HIGH);
-  analogWrite(puissanceDroit, vitesse);
-}
-
-void moteurGauche(int vitesse) {
-  //Tourne a gauche
+void moteurDroite(int v) {
   digitalWrite(sensMGauche, HIGH);
-  analogWrite(puissanceGauche, vitesse);
+  analogWrite(puissanceGauche, v);
+  digitalWrite(marcheGauche, HIGH);
 }
 
-void moteurDroiteR(int vitesse) {
-  //Tourne à droite en reculant
-  digitalWrite(sensMDroit, LOW);
-  analogWrite(puissanceDroit, vitesse);
+void moteurGauche(int v) {
+  digitalWrite(sensMDroit, HIGH);
+  analogWrite(puissanceDroit, v);
+  digitalWrite(marcheDroit, HIGH);
 }
 
-void moteurGaucheR(int vitesse) {
-  //Tourne à gauche en reculant
-  digitalWrite(sensMGauche, LOW);
-  analogWrite(puissanceGauche, vitesse);
+void moteurDroite2(int v) {
+  digitalWrite(sensMGauche, HIGH);
+  analogWrite(puissanceGauche, 100);
+  digitalWrite(sensMDroit, HIGH);
+  analogWrite(puissanceDroit, v);
+}
+
+void moteurGauche2(int v) {
+  digitalWrite(sensMDroit, HIGH);
+  analogWrite(puissanceDroit, 100);
+  digitalWrite(sensMGauche, HIGH);
+  analogWrite(puissanceGauche, v);
+}
+
+void moteurCentre(int v) {
+  digitalWrite(sensMGauche, HIGH);
+  analogWrite(puissanceGauche, v);
+  digitalWrite(sensMDroit, HIGH);
+  analogWrite(puissanceDroit, v);
 }
 
 byte acquisition() {
-  LFG = digitalRead(linefinderGauche);
   LFD = digitalRead(linefinderDroite);
+  LFG = digitalRead(linefinderGauche);
   LFC = digitalRead(linefinderCentre);
 
-  if (LFD == LOW && LFG == LOW && LFC == LOW) {
-    if (LFD == LOW) {
+  if (LFG == false && LFD == false && LFC == true) {
     return 0;
-    } else {
-      return 1;
-    }
-  } else if (LFD == LOW && LFC == LOW) {
-    if {
-      return 1;
-    } else {
-      break;
-    }
-  } else if (LFG == LOW && LFC == LOW) {
-    if (LFG == LOW) {
+  } else if (LFC == false && LFD == true && LFG == false) {
+    return 1;
+  } else if (LFC == false && LFG == true && LFD == false) {
     return 2;
-    } else {
-      break;
-    }
-  } else {
+  } else if (LFC == true && LFG == false && LFD == true) {
     return 3;
+  } else if (LFC == true && LFG == true && LFD == false) {
+    return 4;
+  } else if (LFC == false && LFG == true && LFD == true) {
+    return 5;
+  } else if (LFC == true && LFG == true && LFD == true) {
+    return 6;
   }
 }
 
 void setup() {
-  pinMode(linefinderGauche, INPUT);
-  pinMode(linefinderDroite, INPUT);
-  pinMode(linefinderCentre, INPUT);
-  pinMode(boutonMarche, INPUT);
-  
   pinMode(sensMGauche, OUTPUT);
   pinMode(marcheGauche, OUTPUT);
   pinMode(puissanceGauche, OUTPUT);
-
   pinMode(sensMDroit, OUTPUT);
   pinMode(marcheDroit, OUTPUT);
   pinMode(puissanceDroit, OUTPUT);
+  pinMode(linefinderGauche, INPUT);
+  pinMode(linefinderDroite, INPUT);
+  pinMode(linefinderCentre, INPUT);
+  Serial.begin(9600);
+  do {
+    X = analogRead(boutonMarche);
+    delay(20);
+  } while (X < 1000);
 }
 
 void loop() {
   switch (acquisition()) {
-    case 0: // Arrêt
-      arret();
+    case 0:
+      moteurCentre(AFOND);
       break;
-    case 1: // Avancer
+    case 1:
       moteurDroite(AFOND);
-      moteurGaucheR(AFOND);
       break;
     case 2:
-      moteurDroiteR(AFOND);
       moteurGauche(AFOND);
       break;
-    case 3 :
-      moteurDroite(AFOND);
-      moteurGaucheR(AFOND);
-
-      moteurDroiteR(AFOND);
-      moteurGauche(AFOND);
+    case 3:
+      moteurDroite2(PRUDENT);
+      break;
+    case 4:
+      moteurGauche2(PRUDENT);
+      break;
+    case 5:
+      moteurCentre(AFOND);
+      break;
+    case 6:
+      moteurCentre(0);
       break;
     default:
       arret();
       break;
   }
 }
-
 
 
 /*
