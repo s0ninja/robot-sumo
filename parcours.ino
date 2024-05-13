@@ -51,7 +51,7 @@ byte acquisition() {
   LFG = digitalRead(linefinderGauche);
   LFD = digitalRead(linefinderDroite);
   LFC = digitalRead(linefinderCentre);
-if 
+
   if (LFD == LOW && LFG == LOW && LFC == LOW) {
     return 0;
   } else if (LFD == LOW && LFC == LOW) {
@@ -105,6 +105,7 @@ void loop() {
       break;
   }
 }
+
 
 
 /*
