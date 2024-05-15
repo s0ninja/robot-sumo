@@ -1,6 +1,6 @@
 #define linefinderGauche 2
 #define linefinderDroite 4
-#define linefinderCentre 3
+#define linefinderCentre 5
 #define boutonMarche A2
 #define sensMGauche 12
 #define marcheGauche 9
@@ -47,7 +47,7 @@ void moteurGauche2(int v) {
   analogWrite(puissanceGauche, v);
 }
 
-void moteurCentre(int v) {
+void avancer(int v) {
   digitalWrite(sensMGauche, HIGH);
   analogWrite(puissanceGauche, v);
   digitalWrite(sensMDroit, HIGH);
@@ -59,19 +59,19 @@ byte acquisition() {
   LFG = digitalRead(linefinderGauche);
   LFC = digitalRead(linefinderCentre);
 
-  if (LFG == false && LFD == false && LFC == true) {
+  if (LFG == 0 && LFD == 0 && LFC == 1) {
     return 0;
-  } else if (LFC == false && LFD == true && LFG == false) {
+  } else if (LFC == 0 && LFD == true && LFG == 0) {
     return 1;
-  } else if (LFC == false && LFG == true && LFD == false) {
+  } else if (LFC == 0 && LFG == 1 && LFD == 0) {
     return 2;
-  } else if (LFC == true && LFG == false && LFD == true) {
+  } else if (LFC == 1 && LFG == 0 && LFD == 1) {
     return 3;
-  } else if (LFC == true && LFG == true && LFD == false) {
+  } else if (LFC == 1 && LFG == 1 && LFD == 0) {
     return 4;
-  } else if (LFC == false && LFG == true && LFD == true) {
+  } else if (LFC == 0 && LFG == 1 && LFD == 1) {
     return 5;
-  } else if (LFC == true && LFG == true && LFD == true) {
+  } else if (LFC == 1 && LFG == 1 && LFD == 1) {
     return 6;
   }
 }
@@ -96,7 +96,7 @@ void setup() {
 void loop() {
   switch (acquisition()) {
     case 0:
-      moteurCentre(AFOND);
+      avancer(AFOND);
       break;
     case 1:
       moteurDroite(AFOND);
@@ -111,10 +111,10 @@ void loop() {
       moteurGauche2(PRUDENT);
       break;
     case 5:
-      moteurCentre(AFOND);
+      avancer(AFOND);
       break;
     case 6:
-      moteurCentre(0);
+      avancer(AFOND);
       break;
     default:
       arret();
