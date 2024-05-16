@@ -1,6 +1,6 @@
 #define linefinderGauche 2
 #define linefinderDroite 4
-#define linefinderCentre 5
+#define linefinderCentre 7
 #define boutonMarche A2
 #define sensMGauche 12
 #define marcheGauche 9
@@ -15,43 +15,19 @@ bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
 
 void arret() {
-  digitalWrite(puissanceDroit, LOW);
-  digitalWrite(puissanceGauche, LOW);
-  digitalWrite(marcheGauche, HIGH);
-  digitalWrite(marcheDroit, HIGH);
+  Serial.print("arreter");
 }
 
-void moteurDroite(int v) {
-  digitalWrite(sensMGauche, HIGH);
-  analogWrite(puissanceGauche, v);
-  digitalWrite(marcheGauche, HIGH);
+void allerdroite(int v) {
+  Serial.print("aller a droite");
 }
 
-void moteurGauche(int v) {
-  digitalWrite(sensMDroit, HIGH);
-  analogWrite(puissanceDroit, v);
-  digitalWrite(marcheDroit, HIGH);
-}
-
-void moteurDroite2(int v) {
-  digitalWrite(sensMGauche, HIGH);
-  analogWrite(puissanceGauche, 100);
-  digitalWrite(sensMDroit, HIGH);
-  analogWrite(puissanceDroit, v);
-}
-
-void moteurGauche2(int v) {
-  digitalWrite(sensMDroit, HIGH);
-  analogWrite(puissanceDroit, 100);
-  digitalWrite(sensMGauche, HIGH);
-  analogWrite(puissanceGauche, v);
+void allergauche(int v) {
+  Serial.print("aller a gauche");
 }
 
 void avancer(int v) {
-  digitalWrite(sensMGauche, HIGH);
-  analogWrite(puissanceGauche, v);
-  digitalWrite(sensMDroit, HIGH);
-  analogWrite(puissanceDroit, v);
+  Serial.print("avancer");
 }
 
 byte acquisition() {
@@ -99,28 +75,29 @@ void loop() {
       avancer(AFOND);
       break;
     case 1:
-      moteurDroite(AFOND);
+      allerdroite(AFOND);
       break;
     case 2:
-      moteurGauche(AFOND);
+      allergauche(AFOND);
       break;
     case 3:
-      moteurDroite2(PRUDENT);
+      allerdroite(PRUDENT);
       break;
     case 4:
-      moteurGauche2(PRUDENT);
+      allergauche(PRUDENT);
       break;
     case 5:
-      avancer(AFOND);
+      arret();
       break;
     case 6:
       avancer(AFOND);
       break;
     default:
-      arret(0);
+      arret();
       break;
   }
 }
+
 
 
 /*
