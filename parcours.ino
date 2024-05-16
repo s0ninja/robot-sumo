@@ -61,7 +61,7 @@ byte acquisition() {
 
   if (LFG == 0 && LFD == 0 && LFC == 1) {
     return 0;
-  } else if (LFC == 0 && LFD == true && LFG == 0) {
+  } else if (LFC == 0 && LFD == 1 && LFG == 0) {
     return 1;
   } else if (LFC == 0 && LFG == 1 && LFD == 0) {
     return 2;
@@ -117,7 +117,7 @@ void loop() {
       avancer(AFOND);
       break;
     default:
-      arret();
+      arret(0);
       break;
   }
 }
