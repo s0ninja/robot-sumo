@@ -15,19 +15,31 @@ bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
 
 void arret() {
-  Serial.print("arreter");
+  digitalWrite(puissanceDroit, LOW);
+  digitalWrite(puissanceGauche, LOW);
+  digitalWrite(marcheGauche, HIGH);
+  digitalWrite(marcheDroit, HIGH);
 }
 
 void allerdroite(int v) {
-  Serial.print("aller a droite");
+  digitalWrite(sensMGauche, HIGH);
+  digitalWrite(puissanceGauche, AFOND);
+  digitalWrite(marcheGauche, HIGH);
 }
 
 void allergauche(int v) {
-  Serial.print("aller a gauche");
+  digitalWrite(sensMDroit, LOW);
+  digitalWrite(puissanceDroit, AFOND);
+  digitalWrite(marcheDroit, HIGH);
 }
 
 void avancer(int v) {
-  Serial.print("avancer");
+  digitalWrite(sensMGauche, HIGH);
+  digitalWrite(puissanceGauche, AFOND);
+  digitalWrite(marcheGauche, LOW);
+  digitalWrite(sensMDroit, LOW);
+  digitalWrite(puissanceDroit, AFOND);
+  digitalWrite(marcheDroit, LOW);
 }
 
 byte acquisition() {
@@ -35,20 +47,18 @@ byte acquisition() {
   LFG = digitalRead(linefinderGauche);
   LFC = digitalRead(linefinderCentre);
 
-  if (LFG == 0 && LFD == 0 && LFC == 1) {
-    return 0;
-  } else if (LFC == 0 && LFD == 1 && LFG == 0) {
-    return 1;
-  } else if (LFC == 0 && LFG == 1 && LFD == 0) {
-    return 2;
-  } else if (LFC == 1 && LFG == 0 && LFD == 1) {
-    return 3;
-  } else if (LFC == 1 && LFG == 1 && LFD == 0) {
-    return 4;
-  } else if (LFC == 0 && LFG == 1 && LFD == 1) {
+  if (LFG == 1 && LFC == 1 && LFD == 1) {
     return 5;
-  } else if (LFC == 1 && LFG == 1 && LFD == 1) {
-    return 6;
+  } else if (LFG == 1 && LFC == 1 && LFD == 0) {
+    return 1;
+  } else if (LFG == 0 && LFC == 1 && LFD == 1) {
+    return 2;
+  } else if (LFG == 0 && LFC == 0 && LFD == 1) {
+    return 2;
+  } else if (LFG == 1 && LFC == 0 && LFD == 0) {
+    return 1;
+  } else if (LFG == 0 && LFC == 0 && LFD == 0) {
+    return 0;
   }
 }
 
