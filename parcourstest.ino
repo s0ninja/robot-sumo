@@ -1,118 +1,101 @@
-const int CAPTEUR_GAUCHE = 5; // Capteur Gauche à la broche A0
-const int CAPTEUR_CENTRE = 6; // Capteur Centre à la broche A1
-const int CAPTEUR_DROIT = 2; // Capteur Droit à la broche A2
+#define linefinderGauche 2
+#define linefinderDroite 4
+#define linefinderCentre 7
+#define boutonMarche A2
+#define sensMGauche 12
+#define marcheGauche 9
+#define puissanceGauche 3
+#define sensMDroit 13
+#define marcheDroit 8
+#define puissanceDroit 11
+#define AFOND 130
+#define PRUDENT 60
 
-const int vitesseDroite = 11;
-const int vitesseGauche = 3;
-const int sensDroite = 13;
-const int sensGauche = 12;
-const int freinDroite = 8;
-const int freinGauche = 9;
+bool LFG = 0, LFD = 0, LFC = 0;
+int X = 0;
 
-const int start_button = 4; // Bouton pour démarrer le robot
+void arret() {
+  Serial.print("arreter");
+}
 
-const int led = 7;
+void allerdroite(int v) {
+  Serial.print("aller a droite");
+}
 
-bool capteurGauche;
-bool capteurCentre;
-bool capteurDroit;
-bool start = false;
-bool etatBouton = false;
+void allergauche(int v) {
+  Serial.print("aller a gauche");
+}
+
+void avancer(int v) {
+  Serial.print("avancer");
+}
+
+byte acquisition() {
+  LFD = digitalRead(linefinderDroite);
+  LFG = digitalRead(linefinderGauche);
+  LFC = digitalRead(linefinderCentre);
+
+  if (LFG == 0 && LFD == 0 && LFC == 1) {
+    return 0;
+  } else if (LFC == 0 && LFD == 1 && LFG == 0) {
+    return 1;
+  } else if (LFC == 0 && LFG == 1 && LFD == 0) {
+    return 2;
+  } else if (LFC == 1 && LFG == 0 && LFD == 1) {
+    return 3;
+  } else if (LFC == 1 && LFG == 1 && LFD == 0) {
+    return 4;
+  } else if (LFC == 0 && LFG == 1 && LFD == 1) {
+    return 5;
+  } else if (LFC == 1 && LFG == 1 && LFD == 1) {
+    return 6;
+  }
+}
 
 void setup() {
-  pinMode(CAPTEUR_GAUCHE, INPUT);
-  pinMode(CAPTEUR_CENTRE, INPUT);
-  pinMode(CAPTEUR_DROIT, INPUT);
-
-  pinMode(vitesseDroite, OUTPUT);
-  pinMode(vitesseGauche, OUTPUT);
-  pinMode(sensDroite, OUTPUT);
-  pinMode(sensGauche, OUTPUT);
-  pinMode(freinDroite, OUTPUT);
-  pinMode(freinGauche, OUTPUT);
-
-  pinMode(led, OUTPUT);
-  pinMode(start_button, INPUT); // Bouton pour démarrer le robot
+  pinMode(sensMGauche, OUTPUT);
+  pinMode(marcheGauche, OUTPUT);
+  pinMode(puissanceGauche, OUTPUT);
+  pinMode(sensMDroit, OUTPUT);
+  pinMode(marcheDroit, OUTPUT);
+  pinMode(puissanceDroit, OUTPUT);
+  pinMode(linefinderGauche, INPUT);
+  pinMode(linefinderDroite, INPUT);
+  pinMode(linefinderCentre, INPUT);
+  Serial.begin(9600);
+  do {
+    X = analogRead(boutonMarche);
+    delay(20);
+  } while (X < 1000);
 }
 
 void loop() {
-  capteurGauche = digitalRead(CAPTEUR_GAUCHE);
-  capteurCentre = digitalRead(CAPTEUR_CENTRE);
-  capteurDroit = digitalRead(CAPTEUR_DROIT);
-  etatBouton = digitalRead(start_button);
-
-  if (etatBouton == true) {
-    if (start == false) {
-      start = true;
-      delay(500);
-    }
-    else {
-      start = false;
-      delay(500);
-    }
+  switch (acquisition()) {
+    case 0:
+      avancer(AFOND);
+      break;
+    case 1:
+      allerdroite(AFOND);
+      break;
+    case 2:
+      allergauche(AFOND);
+      break;
+    case 3:
+      allerdroite(PRUDENT);
+      break;
+    case 4:
+      allergauche(PRUDENT);
+      break;
+    case 5:
+      arret();
+      break;
+    case 6:
+      avancer(AFOND);
+      break;
+    default:
+      arret();
+      break;
   }
-
-  if (start == true) {
-    digitalWrite(led, HIGH);
-    digitalWrite(start_button, HIGH);
-  } else {
-    digitalWrite(start_button, LOW);
-  }
-
-  if (capteurGauche && capteurCentre && capteurDroit) {
-    Serial.println("Bouton poussoir start"); //bouton 7  allumé
-    Serial.println("led allumer"); //led allumé
-
-    Serial.println("sens droit avancer"); // Sens Droit Avancer
-    Serial.println("sens gauche avancer"); //Sens Gauche Avancer
-
-    Serial.println("vitesse 255 droit"); //Vitesse 255 Droit
-    Serial.println("vitesse 255 gauche"); //Vitesse 255 Gauche
-
-    Serial.println("frein non engagé"); //Frein non engagé Droit
-    Serial.println("frein non engagé gauche"); //Frein non engagé Gauche
-  } else {
-    if (capteurGauche) {
-      Serial.println("sens droit avancer"); // Sens Droit Avancer
-      Serial.println("sens gauche avancer"); //Sens Gauche Avancer
-
-      Serial.println("frein 255 droit"); //Vitesse 255 Droit
-      Serial.println("vitesse 0 gauche"); //Vitesse 0 Gauche
-
-      Serial.println("frein engagé droit"); //Frein engagé Droit
-      Serial.println("frein non engagé gauche"); //Frein non engagé Gauche
-    } else if (capteurDroit) {
-      Serial.println("sens droit avancer"); // Sens Droit Avancer
-      Serial.println("sens gauche avancer"); //Sens Gauche Avancer
-
-      Serial.println("vitesse 0 droit"); //Vitesse 0 Droit
-      Serial.println("vitesse 255 gauche"); //Vitesse 255 Gauche
-
-      Serial.println("frein non engagé"); //Frein non engagé Droit
-      Serial.println("frein engagé gauche"); //Frein engagé Gauche
-    } else {
-      Serial.println("sens droit avancer"); // Sens Droit Avancer
-      Serial.println("sens gauche avancer"); //Sens Gauche Avancer
-
-      Serial.println("vitesse 0 droit"); //Vitesse 0 Droit
-      Serial.println("vitesse 0 gauche"); //Vitesse 0 Gauche
-
-      Serial.println("frein engagé droit"); //Frein engagé Droit
-      Serial.println("frein engagé gauche"); //Frein engagé Gauche
-    }
-  }
-
-  Serial.println("Bouton poussoir start"); //bouton 7
-  Serial.println("led eteint"); //led eteint
-
-  Serial.println("sens avancer droit"); // Sens Droit Avancer
-  Serial.println("sens avancer gauche"); //Sens Gauche Avancer
-
-  Serial.println("vitessee 0 droit"); //Vitesse 0 Droit
-  Serial.println("vitesse 0 gache"); //Vitesse 0 Gauche
-
-  Serial.println("frein engagé droit"); //Frein engagé Droit
-  Serial.println("frein désangagé gauche"); //Frein engagé Gauche
 }
 
 
