@@ -8,8 +8,8 @@
 #define sensMDroit 13
 #define marcheDroit 8
 #define puissanceDroit 11
-#define AFOND 130
-#define PRUDENT 60
+
+ byte AFOND = 1, nul = 0;
 
 bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
@@ -23,22 +23,22 @@ void arret() {
 
 void allerdroite(int v) {
   digitalWrite(sensMGauche, LOW);
-  digitalWrite(puissanceGauche, AFOND);
+  digitalWrite(puissanceGauche, HIGH);
   digitalWrite(marcheGauche, HIGH);
 }
 
 void allergauche(int v) {
   digitalWrite(sensMDroit, HIGH);
-  digitalWrite(puissanceDroit, AFOND);
+  analogWrite(puissanceDroit, v);
   digitalWrite(marcheDroit, HIGH);
 }
 
 void avancer(int v) {
   digitalWrite(sensMGauche, LOW);
-  digitalWrite(puissanceGauche, AFOND);
+  digitalWrite(puissanceGauche, HIGH);
   digitalWrite(marcheGauche, LOW);
   digitalWrite(sensMDroit, HIGH);
-  digitalWrite(puissanceDroit, AFOND);
+  digitalWrite(puissanceDroit, HIGH);
   digitalWrite(marcheDroit, LOW);
 }
 
@@ -72,7 +72,6 @@ void setup() {
   pinMode(linefinderGauche, INPUT);
   pinMode(linefinderDroite, INPUT);
   pinMode(linefinderCentre, INPUT);
-  Serial.begin(9600);
   do {
     X = analogRead(boutonMarche);
     delay(20);
@@ -91,10 +90,10 @@ void loop() {
       allergauche(AFOND);
       break;
     case 3:
-      allerdroite(PRUDENT);
+      allerdroite(AFOND);
       break;
     case 4:
-      allergauche(PRUDENT);
+      allergauche(AFOND);
       break;
     case 5:
       arret();
