@@ -22,22 +22,22 @@ void arret() {
 }
 
 void allerdroite(int v) {
-  digitalWrite(sensMGauche, HIGH);
+  digitalWrite(sensMGauche, LOW);
   digitalWrite(puissanceGauche, AFOND);
   digitalWrite(marcheGauche, HIGH);
 }
 
 void allergauche(int v) {
-  digitalWrite(sensMDroit, LOW);
+  digitalWrite(sensMDroit, HIGH);
   digitalWrite(puissanceDroit, AFOND);
   digitalWrite(marcheDroit, HIGH);
 }
 
 void avancer(int v) {
-  digitalWrite(sensMGauche, HIGH);
+  digitalWrite(sensMGauche, LOW);
   digitalWrite(puissanceGauche, AFOND);
   digitalWrite(marcheGauche, LOW);
-  digitalWrite(sensMDroit, LOW);
+  digitalWrite(sensMDroit, HIGH);
   digitalWrite(puissanceDroit, AFOND);
   digitalWrite(marcheDroit, LOW);
 }
@@ -50,13 +50,13 @@ byte acquisition() {
   if (LFG == 1 && LFC == 1 && LFD == 1) {
     return 5;
   } else if (LFG == 1 && LFC == 1 && LFD == 0) {
-    return 1;
+    return 2;
   } else if (LFG == 0 && LFC == 1 && LFD == 1) {
-    return 2;
-  } else if (LFG == 0 && LFC == 0 && LFD == 1) {
-    return 2;
-  } else if (LFG == 1 && LFC == 0 && LFD == 0) {
     return 1;
+  } else if (LFG == 0 && LFC == 0 && LFD == 1) {
+    return 1;
+  } else if (LFG == 1 && LFC == 0 && LFD == 0) {
+    return 2;
   } else if (LFG == 0 && LFC == 0 && LFD == 0) {
     return 0;
   }
