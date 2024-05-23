@@ -59,6 +59,10 @@ byte acquisition() {
     return 2;
   } else if (LFG == 0 && LFC == 0 && LFD == 0) {
     return 5;
+  } else if (LFG == 1 && LFC == 0 && LFD == 1) {
+    return 5;
+  } else if (LFG == 0 && LFC == 1 && LFD == 0) {
+    return 5;
   }
 }
 
@@ -72,6 +76,7 @@ void setup() {
   pinMode(linefinderGauche, INPUT);
   pinMode(linefinderDroite, INPUT);
   pinMode(linefinderCentre, INPUT);
+  Serial.begin(9600);
   do {
     X = analogRead(boutonMarche);
     delay(20);
@@ -82,27 +87,35 @@ void loop() {
   switch (acquisition()) {
     case 0:
       avancer(AFOND);
+      Serial.println("case 0");
       break;
     case 1:
       allerdroite(AFOND);
+      Serial.println("case 1");
       break;
     case 2:
       allergauche(AFOND);
+      Serial.println("case 2");
       break;
     case 3:
       allerdroite(AFOND);
+      Serial.println("case 3");
       break;
     case 4:
       allergauche(AFOND);
+      Serial.println("case 4");
       break;
     case 5:
       arret();
+      Serial.println("case 5");
       break;
     case 6:
       avancer(AFOND);
+      Serial.println("case 6");
       break;
     default:
       arret();
+      Serial.println("défault");
       break;
   }
 }
