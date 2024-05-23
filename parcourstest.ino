@@ -14,9 +14,9 @@
 bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
 
-void arret(int v) {
-  analogWrite(puissanceDroit, v);
-  analogWrite(puissanceGauche, v);
+void arret() {
+  analogWrite(puissanceDroit, LOW);
+  analogWrite(puissanceGauche, LOW);
   digitalWrite(marcheGauche, HIGH);
   digitalWrite(marcheDroit, HIGH);
 }
@@ -28,7 +28,7 @@ void allerdroite(int v) {
 }
 
 void allergauche(int v) {
-  digitalWrite(sensMDroit, HIGH);
+  digitalWrite(sensMDroit, LOW);
   analogWrite(puissanceDroit, v);
   digitalWrite(marcheDroit, LOW);
 }
@@ -96,13 +96,13 @@ void loop() {
       allergauche(AFOND);
       break;
     case 5:
-      arret(nul);
+      arret();
       break;
     case 6:
       avancer(AFOND);
       break;
     default:
-      arret(nul);
+      arret();
       break;
   }
 }
