@@ -9,7 +9,7 @@
 #define marcheDroit 8
 #define puissanceDroit 11
 
- byte SPEED = 255, AFOND = 75, nul = 0;
+ byte SPEED = 255, AFOND = 175, nul = 0;
 
 bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
@@ -68,6 +68,7 @@ byte acquisition() {
   } else if (((LFG == 1) && (LFC == 0) && (LFD == 1))||((LFG == 1) && (LFC == 1) && (LFD == 1))) { // Cas Impossible
     return 3; // STOP
   }
+  return 100;
 }
 
 void setup() {
