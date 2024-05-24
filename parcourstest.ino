@@ -9,37 +9,47 @@
 #define marcheDroit 8
 #define puissanceDroit 11
 
- byte SPEED = 255, AFOND = 150, nul = 0;
+ byte SPEED = 255, AFOND = 75, nul = 0;
 
 bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
 
-void arret() {
-  analogWrite(puissanceDroit, 0);
-  analogWrite(puissanceGauche, 0);
-  digitalWrite(marcheGauche, HIGH);
-  digitalWrite(marcheDroit, HIGH);
+void arret(int v) {
+  digitalWrite(sensMGauche, HIGH); 
+  digitalWrite(marcheGauche, HIGH);   
+  analogWrite(puissanceGauche, v);
+  digitalWrite(sensMDroit, LOW);
+  digitalWrite(marcheDroit, HIGH);   
+  analogWrite(puissanceDroit, v);
+
+  delay(200);
 }
 
 void allergauche(int v) {
   digitalWrite(sensMGauche, HIGH);
   analogWrite(puissanceGauche, v);
   digitalWrite(marcheGauche, LOW);
+
+  delay(200);
 }
 
 void allerdroite(int v) {
   digitalWrite(sensMDroit, LOW);
   analogWrite(puissanceDroit, v);
   digitalWrite(marcheDroit, LOW);
+
+  delay(200);
 }
 
 void avancer(int v) {
   digitalWrite(sensMGauche, HIGH);
   analogWrite(puissanceGauche, v);
   digitalWrite(marcheGauche, LOW);
-  digitalWrite(sensMDroit, HIGH);
+  digitalWrite(sensMDroit, LOW);
   analogWrite(puissanceDroit, v);
   digitalWrite(marcheDroit, LOW);
+
+  delay(200);
 }
 
 byte acquisition() {
@@ -47,15 +57,15 @@ byte acquisition() {
   LFG = digitalRead(linefinderGauche);
   LFC = digitalRead(linefinderCentre);
 
-  if ((LFG == 1) && (LFC == 1) && (LFD == 1)) {   // STOP
-    return 3; // Stop
+  if ((LFG == 0) && (LFC == 0) && (LFD == 0)) {   // Avancer
+    return 0; // Avancer
   } else if (((LFG == 1) && (LFC == 1) && (LFD == 0))||((LFG == 1) && (LFC == 0) && (LFD == 0))) { // Allez à Gauche
     return 2; // Allez à Gauche
   } else if (((LFG == 0) && (LFC == 1) && (LFD == 1))||((LFG == 0) && (LFC == 0) && (LFD == 1))) { // Allez à Droite
     return 1; // Allez à Droite
-  } else if ((LFG == 0) && (LFC == 1) && (LFD == 0)) { // Avancer
-    return 0; // Avancer
-  } else if (((LFG == 1) && (LFC == 0) && (LFD == 1))||((LFG == 0) && (LFC == 0) && (LFD == 0))) { // Cas Impossible
+  } else if ((LFG == 1) && (LFC == 0) && (LFD == 1)) { // Avancer
+    return 3; // STOP
+  } else if (((LFG == 1) && (LFC == 0) && (LFD == 1))||((LFG == 1) && (LFC == 1) && (LFD == 1))) { // Cas Impossible
     return 3; // STOP
   }
 }
@@ -93,11 +103,11 @@ void loop() {
       Serial.println("case 2");
       break;
     case 3:                         // Case Stop
-      arret();
+      arret(nul);
       Serial.println("case 3");
       break;
     default:                        // Case par Défault
-      arret();
+      arret(nul);
       Serial.println("défault");
       break;
   }
