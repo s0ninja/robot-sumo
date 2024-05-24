@@ -15,31 +15,31 @@ bool LFG = 0, LFD = 0, LFC = 0;
 int X = 0;
 
 void arret() {
-  analogWrite(puissanceDroit, LOW);
-  analogWrite(puissanceGauche, LOW);
+  analogWrite(puissanceDroit, 0);
+  analogWrite(puissanceGauche, 0);
   digitalWrite(marcheGauche, HIGH);
   digitalWrite(marcheDroit, HIGH);
 }
 
-void allerdroite(int v) {
-  digitalWrite(sensMGauche, LOW);
+void allergauche(int v) {
+  digitalWrite(sensMGauche, HIGH);
   analogWrite(puissanceGauche, v);
   digitalWrite(marcheGauche, LOW);
 }
 
-void allergauche(int v) {
+void allerdroite(int v) {
   digitalWrite(sensMDroit, LOW);
   analogWrite(puissanceDroit, v);
   digitalWrite(marcheDroit, LOW);
 }
 
 void avancer(int v) {
-  digitalWrite(sensMGauche, LOW);
+  digitalWrite(sensMGauche, HIGH);
   analogWrite(puissanceGauche, v);
-  digitalWrite(marcheGauche, HIGH);
+  digitalWrite(marcheGauche, LOW);
   digitalWrite(sensMDroit, HIGH);
   analogWrite(puissanceDroit, v);
-  digitalWrite(marcheDroit, HIGH);
+  digitalWrite(marcheDroit, LOW);
 }
 
 byte acquisition() {
@@ -47,22 +47,16 @@ byte acquisition() {
   LFG = digitalRead(linefinderGauche);
   LFC = digitalRead(linefinderCentre);
 
-  if (LFG == 1 && LFC == 1 && LFD == 1) {
-    return 4;
-  } else if (LFG == 1 && LFC == 1 && LFD == 0) {
-    return 2;
-  } else if (LFG == 0 && LFC == 1 && LFD == 1) {
-    return 1;
-  } else if (LFG == 0 && LFC == 0 && LFD == 1) {
-    return 1;
-  } else if (LFG == 1 && LFC == 0 && LFD == 0) {
-    return 2;
-  } else if (LFG == 0 && LFC == 0 && LFD == 0) {
-    return 3;
-  } else if (LFG == 1 && LFC == 0 && LFD == 1) {
-    return 3;
-  } else if (LFG == 0 && LFC == 1 && LFD == 0) {
-    return 3;
+  if ((LFG == 1) && (LFC == 1) && (LFD == 1)) {   // STOP
+    return 3; // Stop
+  } else if (((LFG == 1) && (LFC == 1) && (LFD == 0))||((LFG == 1) && (LFC == 0) && (LFD == 0))) { // Allez à Gauche
+    return 2; // Allez à Gauche
+  } else if (((LFG == 0) && (LFC == 1) && (LFD == 1))||((LFG == 0) && (LFC == 0) && (LFD == 1))) { // Allez à Droite
+    return 1; // Allez à Droite
+  } else if ((LFG == 0) && (LFC == 1) && (LFD == 0)) { // Avancer
+    return 0; // Avancer
+  } else if (((LFG == 1) && (LFC == 0) && (LFD == 1))||((LFG == 0) && (LFC == 0) && (LFD == 0))) { // Cas Impossible
+    return 3; // STOP
   }
 }
 
@@ -77,6 +71,7 @@ void setup() {
   pinMode(linefinderDroite, INPUT);
   pinMode(linefinderCentre, INPUT);
   Serial.begin(9600);
+
   do {
     X = analogRead(boutonMarche);
     delay(20);
@@ -85,27 +80,23 @@ void setup() {
 
 void loop() {
   switch (acquisition()) {
-    case 0:
+    case 0:                         // Case Avancer
       avancer(AFOND);
       Serial.println("case 0");
       break;
-    case 1:
+    case 1:                         // Case Allez à droite
       allerdroite(AFOND);
       Serial.println("case 1");
       break;
-    case 2:
+    case 2:                         // Case Allez à Gauche
       allergauche(AFOND);
       Serial.println("case 2");
       break;
-    case 3:
+    case 3:                         // Case Stop
       arret();
-      Serial.println("case 5");
+      Serial.println("case 3");
       break;
-    case 4:
-      avancer(AFOND);
-      Serial.println("case 6");
-      break;
-    default:
+    default:                        // Case par Défault
       arret();
       Serial.println("défault");
       break;
