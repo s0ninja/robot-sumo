@@ -7,3 +7,6 @@ digitalRead( , ); //Lire une information
 
 if(){} //Si
 else(){} //Sinon
+
+void setup {} //sert a setup (à mettre en place) le programme | Donner les information de base à ton programme
+void loop {} //On vas éxécuté le programme ici
