@@ -94,9 +94,10 @@ void setup() {
 
   Serial.begin(9600);
 
-  do {X  = analogRead(boutonMarche);
-    delay(20);}
-  while (X<1000);                       
+  do {
+    X = analogRead(boutonMarche);
+    delay(20);
+  } while (X < 1000);
 }
 
 
