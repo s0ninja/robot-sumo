@@ -20,7 +20,7 @@ bool sensMoteurDroit = LOW;
 
 bool sensMoteurGenerale = LOW;
 
-bool CapG = 0, CapD = 0, CapC = 0;
+bool LFG = 0, LFD = 0, LFC = 0;
 bool etatBouton = 0, marche = 0;
 int X = 0;
 
@@ -66,7 +66,6 @@ byte acquisition() {
   LFD = digitalRead(capteurDeLigneDroite);
   LFG = digitalRead(capteurDeLigneGauche);
   LFC = digitalRead(capteurDeLigneCentre);
-
 
   if ((LFG == 0) && (LFC == 0) && (LFD == 0)) {
     return 0; // Avancer
