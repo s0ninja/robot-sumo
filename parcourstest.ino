@@ -1,5 +1,5 @@
-#define capteurDeLigneGauche 2
-#define capteurDeLigneDroite 4
+#define capteurDeLigneGauche 6
+#define capteurDeLigneDroite A0
 #define capteurDeLigneCentre 7
 
 #define bouton A2
@@ -16,7 +16,7 @@
 byte SPEED = 255, AFOND = 175, nul = 0;
 
 bool sensMoteurGaucheV = LOW;
-bool sensMoteurDroitV = LOW;
+bool sensMoteurDroitB = LOW;
 
 bool sensMoteurGenerale = LOW;
 
@@ -141,5 +141,5 @@ void loop() {
   } else {
     analogWrite(led, LOW);
   }
-  delay(40);  
+  delay(50);  
 }
