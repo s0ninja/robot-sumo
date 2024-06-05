@@ -15,8 +15,8 @@
 
 byte SPEED = 255, AFOND = 175, nul = 0;
 
-bool sensMoteurGauche = LOW;
-bool sensMoteurDroit = LOW;
+bool sensMoteurGaucheV = LOW;
+bool sensMoteurDroitV = LOW;
 
 bool sensMoteurGenerale = LOW;
 
@@ -101,7 +101,7 @@ void setup() {
 }
 
 void loop() {
-  etatBouton = analogRead(bouton)
+  etatBouton = analogRead(bouton);
 
   if (etatBouton == 1) {
     if (marche == 0) {
