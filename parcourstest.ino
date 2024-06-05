@@ -1,5 +1,5 @@
 #define capteurDeLigneGauche 6
-#define capteurDeLigneDroite A0
+#define capteurDeLigneDroite 4
 #define capteurDeLigneCentre 7
 
 #define bouton A2
@@ -28,36 +28,37 @@ void arret(int v) {
   digitalWrite(sensMoteurGauche, HIGH); 
   digitalWrite(marcheMoteurGauche, HIGH);   
   analogWrite(puissanceMoteurGauche, v);
-  digitalWrite(sensMoteurDroite, LOW);
+  digitalWrite(sensMoteurDroite, HIGH);
   digitalWrite(marcheMoteurDroite, HIGH);   
   analogWrite(puissanceMoteurDroite, v);
 }
 
 void allergauche(int v) {
-  digitalWrite(sensMoteurGauche, sensMoteurGenerale);
+  digitalWrite(sensMoteurGauche, HIGH);
   analogWrite(puissanceMoteurGauche, v);
   digitalWrite(marcheMoteurGauche, LOW);
 
-  digitalWrite(sensMoteurDroite, sensMoteurGenerale);
+  digitalWrite(sensMoteurDroite, LOW);
   analogWrite(puissanceMoteurDroite, nul);
   digitalWrite(marcheMoteurDroite, HIGH);
 }
 
 void allerdroite(int v) {
-  digitalWrite(sensMoteurGauche, sensMoteurGenerale);
+  digitalWrite(sensMoteurGauche, HIGH);
   analogWrite(puissanceMoteurGauche, nul);
   digitalWrite(marcheMoteurGauche, HIGH);
 
-  digitalWrite(sensMoteurDroite, sensMoteurGenerale);
+  digitalWrite(sensMoteurDroite, LOW);
   analogWrite(puissanceMoteurDroite, v);
   digitalWrite(marcheMoteurDroite, LOW);
 }
 
 void avancer(int v) {
-  digitalWrite(sensMoteurGauche, sensMoteurGenerale);
+  digitalWrite(sensMoteurGauche, HIGH);
   analogWrite(puissanceMoteurGauche, v);
   digitalWrite(marcheMoteurGauche, LOW);
-  digitalWrite(sensMoteurDroite, sensMoteurGenerale);
+
+  digitalWrite(sensMoteurDroite, LOW);
   analogWrite(puissanceMoteurDroite, v);
   digitalWrite(marcheMoteurDroite, LOW);
 }
@@ -67,16 +68,16 @@ byte acquisition() {
   LFG = digitalRead(capteurDeLigneGauche);
   LFC = digitalRead(capteurDeLigneCentre);
 
-  if ((LFG == 1) && (LFC == 1) && (LFD == 1)) {
-    return 0; // Avancer
-  } else if (((LFG == 1) && (LFC == 1) && (LFD == 0)) || ((LFG == 1) && (LFC == 0) && (LFD == 0))) {
-    return 3; // Allez à Gauche
-  } else if (((LFG == 0) && (LFC == 1) && (LFD == 1)) || ((LFG == 0) && (LFC == 0) && (LFD == 1))) {
-    return 2; // Allez à Droite
-  } else if (((LFG == 0) && (LFC == 0) && (LFD == 0)) || ((LFG == 0) && (LFC ==1) && (LFD == 0))) {
-    return 1; // STOP
+  if ((LFG == 0) && (LFC == 0) && (LFD == 0)) {
+    return 0;
+  } else if (((LFG == 0) && (LFC == 0) && (LFD == 1)) || ((LFG == 0) && (LFC == 1) && (LFD == 1))) {
+    return 2;
+  } else if (((LFG == 1) && (LFC == 0) && (LFD == 0)) || ((LFG == 1) && (LFC == 1) && (LFD == 0))) {
+    return 3;
+  } else if (((LFG == 1) && (LFC == 1) && (LFD == 1)) || ((LFG == 1) && (LFC == 0) && (LFD == 1))) {
+    return 1;
   } else {
-    return 1; // STOP
+    return 1;
   }
 }
 
