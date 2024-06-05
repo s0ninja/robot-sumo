@@ -67,13 +67,13 @@ byte acquisition() {
   LFG = digitalRead(capteurDeLigneGauche);
   LFC = digitalRead(capteurDeLigneCentre);
 
-  if ((LFG == 0) && (LFC == 0) && (LFD == 0)) {
+  if ((LFG == 1) && (LFC == 1) && (LFD == 1)) {
     return 0; // Avancer
   } else if (((LFG == 1) && (LFC == 1) && (LFD == 0)) || ((LFG == 1) && (LFC == 0) && (LFD == 0))) {
     return 3; // Allez à Gauche
   } else if (((LFG == 0) && (LFC == 1) && (LFD == 1)) || ((LFG == 0) && (LFC == 0) && (LFD == 1))) {
     return 2; // Allez à Droite
-  } else if ((LFG == 1) && (LFC == 0) && (LFD == 1)) {
+  } else if (((LFG == 0) && (LFC == 0) && (LFD == 0)) || ((LFG == 0) && (LFC ==1) && (LFD == 0))) {
     return 1; // STOP
   } else {
     return 1; // STOP
