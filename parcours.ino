@@ -1,9 +1,10 @@
-#define capteurDeLigneGauche 6
+
+#define capteurDeLigneGauche 5
 #define capteurDeLigneDroite 4
-#define capteurDeLigneCentre 7
+#define capteurDeLigneCentre A1
 
 #define bouton A2
-#define led 5
+#define led A0
 
 #define sensMoteurGauche 12
 #define marcheMoteurGauche 9
@@ -141,6 +142,7 @@ void loop() {
   }
   } else {
     analogWrite(led, LOW);
+    arret(nul);
   }
   delay(50);  
 }
