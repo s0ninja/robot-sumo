@@ -1,4 +1,3 @@
-
 #define capteurDeLigneGauche 5
 #define capteurDeLigneDroite 4
 #define capteurDeLigneCentre A1
@@ -14,7 +13,7 @@
 #define marcheMoteurDroite 8
 #define puissanceMoteurDroite 11
 
-byte SPEED = 255, AFOND = 175, nul = 0;
+byte SPEED = 255, AFOND = 75, nul = 0;
 
 bool sensMoteurGaucheV = LOW;
 bool sensMoteurDroitB = LOW;
@@ -143,6 +142,5 @@ void loop() {
   } else {
     analogWrite(led, LOW);
     arret(nul);
-  }
-  delay(50);  
+  } 
 }
